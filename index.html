@@ -11,13 +11,14 @@
 
 :root {
   --ink:      #575756;
-  --ink-deep: #3a3836;   /* point 6 : gris très foncé, jamais noir */
+  --ink-deep: #3a3836;
   --ink-soft: #8a8988;
   --ink-pale: #c4c2c0;
   --beige:    #F5F2EE;
   --white:    #FDFCFB;
   --linen:    #E8E3DC;
-  --gold:     #B8996E;
+  /* FIX 1 : couleur marron remplacée → #7D7165 */
+  --gold:     #7D7165;
 }
 
 html { scroll-behavior: smooth; }
@@ -52,7 +53,7 @@ body.hov #cur-ring { width: 48px; height: 48px; border-color: var(--gold); }
 body.lb-open #cur-dot  { background: rgba(255,255,255,.8); }
 body.lb-open #cur-ring { border-color: rgba(255,255,255,.28); }
 
-/* ─── NAV — point 1 : transparent → solid au scroll ── */
+/* ─── NAV ─────────────────────────────── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   background: transparent;
@@ -74,8 +75,8 @@ nav.stuck {
 .nav-r { justify-content: flex-end; }
 nav a {
   font-family: 'Quicksand', sans-serif;
-  font-size: 10px; font-weight: 500;
-  letter-spacing: 2.5px; text-transform: uppercase;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 2px; text-transform: uppercase;
   color: rgba(255,255,255,.7); text-decoration: none;
   transition: color .2s;
 }
@@ -84,8 +85,8 @@ nav.stuck a { color: var(--ink-soft); }
 nav.stuck a:hover { color: var(--ink-deep); }
 .nav-logo {
   font-family: 'Playfair Display', serif;
-  font-style: italic; font-size: 15px; font-weight: 400;
-  letter-spacing: 1px; text-align: center;
+  font-style: italic; font-size: 18px; font-weight: 400;
+  letter-spacing: 4px; text-align: center; text-transform: none;
   color: rgba(255,255,255,.9); text-decoration: none;
   transition: color .3s;
 }
@@ -100,7 +101,7 @@ nav.stuck .nav-logo { color: var(--ink-deep); }
 }
 .hero-bg {
   position: absolute; inset: 0;
-  background: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=2200&q=85') center/cover no-repeat;
+  background: url('assets/images/hero/hero.jpg') center/cover no-repeat;
   will-change: transform;
 }
 .hero-overlay {
@@ -113,12 +114,11 @@ nav.stuck .nav-logo { color: var(--ink-deep); }
 .hero-content { position: relative; z-index: 1; }
 .hero-label {
   font-size: 9px; letter-spacing: 4px;
-  text-transform: uppercase; color: var(--gold);
+  text-transform: uppercase; color: rgba(255,255,255,0.85);
   margin-bottom: 14px;
   opacity: 0; transform: translateY(14px);
   animation: up .8s .3s forwards;
 }
-/* point 2 : retour à la ligne après "racontent" */
 .hero-title {
   font-family: 'Playfair Display', serif;
   font-style: italic; font-weight: 400;
@@ -136,7 +136,7 @@ nav.stuck .nav-logo { color: var(--ink-deep); }
   display: grid; grid-template-columns: 5fr 7fr;
 }
 .about-img {
-  background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80') center/cover;
+  background: url('assets/images/about/about.jpg') center/cover;
   min-height: 440px;
 }
 .about-body {
@@ -148,6 +148,7 @@ nav.stuck .nav-logo { color: var(--ink-deep); }
   text-transform: uppercase; color: var(--gold);
   margin-bottom: 16px;
 }
+/* FIX 2 : about-title réintégré */
 .about-title {
   font-family: 'Playfair Display', serif;
   font-style: italic; font-weight: 400;
@@ -173,30 +174,23 @@ nav.stuck .nav-logo { color: var(--ink-deep); }
 .cta-link:hover .arr { transform: translateX(5px); }
 
 /* ─── SECTION HEADER ──────────────────── */
-/* point 3 : "sélection" en or, pas de ligne sous le titre */
-.sec-head {
-  padding: 60px 52px 18px;
-  /* pas de border-bottom */
-}
+.sec-head { padding: 60px 52px 18px; }
 .sec-selection {
-  font-size: 9px; letter-spacing: 4px;
+  font-size: 9px; letter-spacing: 6px;
   text-transform: uppercase; color: var(--gold);
   margin-bottom: 8px;
 }
 .sec-title {
   font-family: 'Playfair Display', serif;
   font-style: italic; font-weight: 400;
-  font-size: 36px; color: var(--ink-deep);
+  font-size: 36px; color: var(--ink-deep); letter-spacing: 4px;
 }
 
-/* ─── GALLERY — fond blanc ────────────── */
+/* ─── GALLERY ─────────────────────────── */
 .gallery-wrap {
   background: var(--white);
   padding: 20px 52px 52px;
 }
-
-/* ─── CSS COLUMNS — ratio naturel ────── */
-/* point 12 confirmé : les images gardent leur ratio naturel */
 .gallery-cols {
   column-count: 3;
   column-gap: 16px;
@@ -208,7 +202,6 @@ nav.stuck .nav-logo { color: var(--ink-deep); }
   overflow: hidden;
   display: block;
   cursor: none;
-  /* force le contexte de positionnement */
   transform: translateZ(0);
 }
 .g-item img {
@@ -217,17 +210,20 @@ nav.stuck .nav-logo { color: var(--ink-deep); }
   transition: transform .65s cubic-bezier(.25,.46,.45,.94);
   -webkit-user-drag: none;
   user-select: none;
-  /* pas de pointer-events: none ici → hover sur .g-item reste fiable */
 }
 .g-item:hover img { transform: scale(1.04); }
 
-/* point 5 : légendes — fond gris foncé (point 6 aussi) */
-/* point 6 : rgba(55,53,52) = gris très foncé, pas noir */
+/* FIX 3 : gradient légendes corrigé — 1% → 50% */
 .g-caption {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  background: rgba(55,53,52,0.80);
-  padding: 16px 16px 14px;
+  background: linear-gradient(
+    to top,
+    rgba(46,38,30,0.90) 0%,
+    rgba(46,38,30,0.45) 50%,
+    transparent 100%
+  );
+  padding: 48px 16px 14px;
   opacity: 0;
   transform: translateY(6px);
   transition: opacity .3s ease, transform .3s ease;
@@ -248,7 +244,6 @@ nav.stuck .nav-logo { color: var(--ink-deep); }
   font-size: 9px; letter-spacing: 1.8px;
   text-transform: uppercase; color: rgba(255,255,255,.5);
 }
-/* petit bouton + visible au hover */
 .g-expand {
   position: absolute; top: 12px; right: 12px;
   width: 26px; height: 26px;
@@ -310,6 +305,7 @@ nav.stuck .nav-logo { color: var(--ink-deep); }
 }
 
 /* ─── MEDIA SECTION ──────────────────── */
+/* FIX 4 : mise en page 360° restructurée */
 .media-section {
   background: var(--ink-deep);
   padding: 68px 52px;
@@ -321,9 +317,15 @@ nav.stuck .nav-logo { color: var(--ink-deep); }
   font-size: 32px; color: var(--white);
   margin-bottom: 36px;
 }
+/* Grille adaptative : 2 blocs si 2 médias, 1 bloc centré si 1 seul */
 .media-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
+}
+.media-grid.single {
+  grid-template-columns: 1fr;
+  max-width: 860px;
 }
 .media-block iframe,
 .media-block video {
@@ -337,14 +339,12 @@ nav.stuck .nav-logo { color: var(--ink-deep); }
 }
 
 /* ─── CONTACT ─────────────────────────── */
-/* fond beige · pas de téléphone */
 .contact {
   background: var(--beige);
   padding: 88px 52px;
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 72px; align-items: start;
 }
-/* point 4 : "projet" reste en or via <em> */
 .contact-title {
   font-family: 'Playfair Display', serif;
   font-style: italic; font-weight: 400;
@@ -392,17 +392,14 @@ nav.stuck .nav-logo { color: var(--ink-deep); }
 }
 .fsub:hover { background: var(--gold); }
 
-/* ─── FOOTER — point 7 : blanc sobre ─── */
+/* ─── FOOTER ───────────────────────────── */
 footer {
   background: var(--white);
   border-top: 1px solid var(--linen);
   padding: 24px 52px;
   display: flex; justify-content: space-between; align-items: center;
 }
-.fc {
-  font-size: 10px; letter-spacing: 1px;
-  color: var(--ink-pale);      /* gris clair, pas noir */
-}
+.fc { font-size: 10px; letter-spacing: 1px; color: var(--ink-pale); }
 .fn {
   font-family: 'Playfair Display', serif;
   font-style: italic; font-size: 12px; letter-spacing: 1px;
@@ -431,13 +428,11 @@ footer {
   .gallery-cols { column-count: 1; }
   .sec-head { padding: 48px 24px 16px; }
   .media-section { padding: 52px 24px; }
-  .media-grid { grid-template-columns: 1fr; }
+  .media-grid, .media-grid.single { grid-template-columns: 1fr; }
   .contact { grid-template-columns: 1fr; gap: 48px; padding: 60px 24px; }
   footer { padding: 18px 24px; flex-direction: column; gap: 6px; text-align: center; }
 }
 
-/* ─── PROTECTIONS IMAGES ───────────────── */
-/* pas de pointer-events:none global sur img — cf. note dans le JS */
 img { -webkit-user-drag: none; user-select: none; }
 </style>
 </head>
@@ -456,7 +451,7 @@ img { -webkit-user-drag: none; user-select: none; }
   <button id="lb-next" aria-label="Suivant">›</button>
 </div>
 
-<!-- NAV — point 1 : transparent au départ -->
+<!-- NAV -->
 <nav id="nav">
   <ul class="nav-l">
     <li><a href="#interieurs">intérieurs</a></li>
@@ -464,7 +459,7 @@ img { -webkit-user-drag: none; user-select: none; }
   </ul>
   <a href="#top" class="nav-logo">stéphanie moltchanoff</a>
   <ul class="nav-r">
-    <li><a href="#immersif">360° & vidéo</a></li>
+    <li><a href="#immersif">visites virtuelles</a></li>
     <li><a href="#contact">contact</a></li>
   </ul>
 </nav>
@@ -475,8 +470,13 @@ img { -webkit-user-drag: none; user-select: none; }
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <p class="hero-label">visualisation architecturale · paris & remote</p>
-    <!-- point 2 : retour à la ligne après "racontent" -->
-    <h1 class="hero-title">images qui racontent<br>l'espace</h1>
+    <!--
+      PHRASE HERO — choisissez parmi ces options et décommentez celle que vous voulez :
+      A : l'architecture comprise,<br>l'image juste
+      B : lire l'espace,<br>le révéler en image
+      C : là où l'architecture<br>devient lumière
+    -->
+    <h1 class="hero-title">des images qui racontent<br>l'espace</h1>
   </div>
 </section>
 
@@ -485,20 +485,42 @@ img { -webkit-user-drag: none; user-select: none; }
   <div class="about-img"></div>
   <div class="about-body">
     <p class="eyebrow">à propos</p>
-    <h2 class="about-title">double regard,<br>une seule image juste</h2>
+    <!-- FIX 2 : titre about réintégré — remplacez par votre choix -->
+    <h2 class="about-title">l'architecture comprise,<br>l'image juste</h2>
     <p class="about-text">
-      <strong>architecte d.e.</strong> et infographiste 3d, je traduis les projets de design et d'architecture en images qui racontent l'espace autant qu'elles le montrent.<br><br>
-      six années d'expérience dont quatre à piloter un pôle image pour la promotion résidentielle haut de gamme. ma démarche se concentre sur la lumière naturelle, les matériaux et la justesse des proportions.
+      <strong>Architecte D.E.</strong> et infographiste 3D, je traduis les projets de design
+      et d'architecture en images qui racontent l'espace autant qu'elles le montrent.<br><br>
+      Six années d'expérience dont quatre à piloter le pôle image pour de grands groupes
+      de la promotion immobilière. Ma démarche se concentre sur la lumière naturelle,
+      les matériaux et la justesse des proportions.
     </p>
+    <!--
+      BOOK PDF — deux options :
+      Option A (fichier local)  : href="assets/book-stephanie-moltchanoff-2026.pdf"
+      Option B (Google Drive)   : href="https://drive.google.com/uc?export=download&id=VOTRE_ID"
+      Remplacez VOTRE_ID par la longue chaîne dans votre lien Drive après /d/
+    -->
     <a href="assets/book-stephanie-moltchanoff-2026.pdf" class="cta-link" download>
       télécharger le book 2026 <span class="arr">→</span>
     </a>
   </div>
 </section>
 
-<!-- INTÉRIEURS -->
+<!-- ─── INTÉRIEURS ─────────────────────────
+  ORDRE RECOMMANDÉ (du plus impactant au plus secondaire) :
+  1. Suite prune        → fort, signature, lumière dramatique
+  2. Salle de bain FIGR → référence architecte nommé, qualité max
+  3. Harley Graham      → référence client grand nom
+  4. Salon arche        → distinctif, couleur, composition
+  5. Eterna Bordeaux    → projet client réel
+  6. Salon Japandi      → ambiance, matières
+  7. Salon moderne      → étude lumière
+  8. Eterna cuisine     → projet client réel
+  9. Eria Cogedim       → tertiaire (attire les clients bureau)
+  10. Global Agencement → tertiaire
+  11. Muuto             → produit lifestyle (met en fin de liste)
+-->
 <section id="interieurs" style="background: var(--white);">
-  <!-- point 3 : "sélection" en or devant le titre, pas de ligne -->
   <div class="sec-head rv">
     <p class="sec-selection">sélection</p>
     <h2 class="sec-title">intérieurs</h2>
@@ -508,23 +530,11 @@ img { -webkit-user-drag: none; user-select: none; }
 
       <div class="g-item rv"
            data-src="assets/images/interieurs/INT-01-suite-prune.jpg"
-           data-cap="suite parentale — tonalité prune · 3ds max · corona">
-        <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&q=80"
+           data-cap="Suite parentale — tonalité prune · 3ds Max · Corona">
+        <img src="assets/images/interieurs/INT-01-suite-prune.jpg"
              alt="Suite parentale" loading="lazy" draggable="false">
         <div class="g-caption">
-          <div class="g-cap-title">suite parentale — tonalité prune</div>
-          <div class="g-cap-tools">3ds max · corona · photoshop</div>
-        </div>
-        <div class="g-expand">+</div>
-      </div>
-
-      <div class="g-item rv"
-           data-src="assets/images/interieurs/INT-02-harley-graham.jpg"
-           data-cap="résidence mona lane — harley graham architects · 3ds max · corona">
-        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80"
-             alt="Harley Graham" loading="lazy" draggable="false">
-        <div class="g-caption">
-          <div class="g-cap-title">résidence mona lane — harley graham architects</div>
+          <div class="g-cap-title">Suite parentale</div>
           <div class="g-cap-tools">3ds max · corona · photoshop</div>
         </div>
         <div class="g-expand">+</div>
@@ -532,11 +542,23 @@ img { -webkit-user-drag: none; user-select: none; }
 
       <div class="g-item rv"
            data-src="assets/images/interieurs/INT-03-salle-de-bain-figr.jpg"
-           data-cap="salle de bain — figr architecture · 3ds max · corona">
-        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80"
+           data-cap="Salle de bain — FIGR Architecture · 3ds Max · Corona">
+        <img src="assets/images/interieurs/INT-03-salle-de-bain-figr.jpg"
              alt="Salle de bain FIGR" loading="lazy" draggable="false">
         <div class="g-caption">
-          <div class="g-cap-title">salle de bain — figr architecture</div>
+          <div class="g-cap-title">Salle de bain — FIGR Architecture</div>
+          <div class="g-cap-tools">3ds max · corona · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/interieurs/INT-02-harley-graham.jpg"
+           data-cap="Résidence Mona Lane — Harley Graham Architects · 3ds Max · Corona">
+        <img src="assets/images/interieurs/INT-02-harley-graham.jpg"
+             alt="Harley Graham" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">Résidence Mona Lane — Harley Graham Architects</div>
           <div class="g-cap-tools">3ds max · corona · photoshop</div>
         </div>
         <div class="g-expand">+</div>
@@ -544,11 +566,11 @@ img { -webkit-user-drag: none; user-select: none; }
 
       <div class="g-item rv"
            data-src="assets/images/interieurs/INT-04-salon-arche.jpg"
-           data-cap="salon arche — étude composition · 3ds max · corona">
-        <img src="https://images.unsplash.com/photo-1615529162924-f8605388461d?w=800&q=80"
+           data-cap="Salon arche — Étude de lumière · 3ds Max · Corona">
+        <img src="assets/images/interieurs/INT-04-salon-arche.jpg"
              alt="Salon arche" loading="lazy" draggable="false">
         <div class="g-caption">
-          <div class="g-cap-title">salon arche — étude composition</div>
+          <div class="g-cap-title">Salon arche — Étude de lumière</div>
           <div class="g-cap-tools">3ds max · corona · photoshop</div>
         </div>
         <div class="g-expand">+</div>
@@ -556,11 +578,11 @@ img { -webkit-user-drag: none; user-select: none; }
 
       <div class="g-item rv"
            data-src="assets/images/interieurs/INT-05-eterna-bordeaux.jpg"
-           data-cap="programme eterna — promoteur ideal · bordeaux · blender · cycles">
-        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80"
+           data-cap="Programme résidentiel Eterna — IDEAL · Bordeaux · Blender · Cycles">
+        <img src="assets/images/interieurs/INT-05-eterna-bordeaux.jpg"
              alt="Eterna Bordeaux" loading="lazy" draggable="false">
         <div class="g-caption">
-          <div class="g-cap-title">programme eterna — promoteur ideal · bordeaux</div>
+          <div class="g-cap-title">Programme résidentiel Eterna — IDEAL · Bordeaux</div>
           <div class="g-cap-tools">blender · cycles · photoshop</div>
         </div>
         <div class="g-expand">+</div>
@@ -568,11 +590,23 @@ img { -webkit-user-drag: none; user-select: none; }
 
       <div class="g-item rv"
            data-src="assets/images/interieurs/INT-06-salon-japandi.jpg"
-           data-cap="salon japandi — étude ambiance · 3ds max · corona">
-        <img src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=800&q=80"
+           data-cap="Salon Japandi — Étude d'ambiance · 3ds Max · Corona">
+        <img src="assets/images/interieurs/INT-06-salon-japandi.jpg"
              alt="Salon Japandi" loading="lazy" draggable="false">
         <div class="g-caption">
-          <div class="g-cap-title">salon japandi — étude ambiance</div>
+          <div class="g-cap-title">Salon Japandi — Étude d'ambiance</div>
+          <div class="g-cap-tools">3ds max · corona · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/interieurs/INT-08-salon-moderne.jpg"
+           data-cap="Salon moderne — Étude lumière · 3ds Max · Corona">
+        <img src="assets/images/interieurs/INT-08-salon-moderne.jpg"
+             alt="Salon moderne" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">Salon moderne — Étude lumière</div>
           <div class="g-cap-tools">3ds max · corona · photoshop</div>
         </div>
         <div class="g-expand">+</div>
@@ -580,24 +614,48 @@ img { -webkit-user-drag: none; user-select: none; }
 
       <div class="g-item rv"
            data-src="assets/images/interieurs/INT-07-eterna-cuisine.jpg"
-           data-cap="programme eterna — cuisine ouverte · blender · cycles">
-        <img src="https://images.unsplash.com/photo-1556909172-54557c7e4fb7?w=800&q=80"
+           data-cap="Programme résidentiel Eterna — cuisine ouverte · Blender · Cycles">
+        <img src="assets/images/interieurs/INT-07-eterna-cuisine.jpg"
              alt="Cuisine Eterna" loading="lazy" draggable="false">
         <div class="g-caption">
-          <div class="g-cap-title">programme eterna — cuisine ouverte</div>
+          <div class="g-cap-title">Programme résidentiel Eterna — cuisine ouverte</div>
           <div class="g-cap-tools">blender · cycles · photoshop</div>
         </div>
         <div class="g-expand">+</div>
       </div>
 
       <div class="g-item rv"
-           data-src="assets/images/interieurs/INT-08-salon-moderne.jpg"
-           data-cap="salon moderne — étude lumière · 3ds max · corona">
-        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80"
-             alt="Salon moderne" loading="lazy" draggable="false">
+           data-src="assets/images/interieurs/INT-09-eria-cogedim.jpg"
+           data-cap="Espace cafétaria — Tour ERIA · Cogedim · 3ds Max · V-Ray">
+        <img src="assets/images/interieurs/INT-09-eria-cogedim.jpg"
+             alt="Cafétaria Tour ERIA" loading="lazy" draggable="false">
         <div class="g-caption">
-          <div class="g-cap-title">salon moderne — étude lumière</div>
-          <div class="g-cap-tools">3ds max · corona · photoshop</div>
+          <div class="g-cap-title">Espace cafétaria — Tour ERIA · Cogedim</div>
+          <div class="g-cap-tools">3ds max · v-ray · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/interieurs/INT-11-bureau-global-agencement.jpg"
+           data-cap="Aménagement de bureau — Global Agencement · 3ds Max · V-Ray">
+        <img src="assets/images/interieurs/INT-11-bureau-global-agencement.jpg"
+             alt="Bureaux Global Agencement" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">Aménagement de bureau — Global Agencement</div>
+          <div class="g-cap-tools">3ds max · v-ray · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/interieurs/INT-10-interieur-muuto.jpg"
+           data-cap="Mobilier Muuto — étude produit · 3ds Max · V-Ray">
+        <img src="assets/images/interieurs/INT-10-interieur-muuto.jpg"
+             alt="Mobilier Muuto" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">Mobilier Muuto — étude produit</div>
+          <div class="g-cap-tools">3ds max · v-ray · photoshop</div>
         </div>
         <div class="g-expand">+</div>
       </div>
@@ -606,34 +664,65 @@ img { -webkit-user-drag: none; user-select: none; }
   </div>
 </section>
 
-<!-- 360° & VIDÉO — entre intérieurs et extérieurs -->
+<!-- ─── 360° & VIDÉO ──────────────────────
+  FIX 4 : mise en page restructurée
+  - Si vous n'avez pas encore de vidéo YouTube : utilisez la version "single"
+    en remplaçant media-grid par media-grid single (un seul bloc centré)
+  - Quand vous avez votre ID YouTube : décommentez l'iframe YouTube
+    et supprimez le commentaire "video à venir"
+-->
 <section class="media-section rv" id="immersif">
   <p class="eyebrow">expériences immersives</p>
   <h2 class="media-title">360° & vidéo</h2>
+
+  <!--
+    OPTION A — Seulement le 360° pour l'instant (un bloc centré) :
+    Changez "media-grid" en "media-grid single" ci-dessous
+    et supprimez le second div.media-block
+
+    OPTION B — 360° + vidéo YouTube (quand vous avez l'ID) :
+    Gardez "media-grid" et décommentez l'iframe YouTube
+  -->
   <div class="media-grid">
+
+    <!-- BLOC 1 : visite 360° -->
     <div class="media-block">
       <iframe
         src="https://step090.github.io/Appartement-360-Salon/"
         allowfullscreen
-        title="Visite virtuelle 360°">
+        title="Visite virtuelle 360° — Salon">
       </iframe>
       <p class="media-lbl">visite virtuelle 360° — salon · blender</p>
     </div>
+
+    <!-- BLOC 2 : vidéo YouTube
+         Remplacez VOTRE_ID par les caractères après ?v= dans l'URL YouTube
+         ex: https://youtube.com/watch?v=AbCdEfGhIjK → VOTRE_ID = AbCdEfGhIjK
+    -->
     <div class="media-block">
-      <!-- YouTube → remplacez VOTRE_ID par l'id dans l'URL après ?v= -->
-      <!-- <iframe src="https://www.youtube.com/embed/VOTRE_ID" allowfullscreen></iframe> -->
-      <!-- Fichier local → décommentez ci-dessous -->
-      <video controls poster="assets/images/video-poster.jpg">
-        <source src="assets/video/configurateur.mp4" type="video/mp4">
-      </video>
+      <iframe
+        src="https://www.youtube.com/embed/VOTRE_ID"
+        allowfullscreen
+        title="Configurateur de finitions">
+      </iframe>
       <p class="media-lbl">configurateur de finitions — programme résidentiel</p>
     </div>
+
   </div>
 </section>
 
-<!-- EXTÉRIEURS -->
+<!-- ─── EXTÉRIEURS ─────────────────────────
+  ORDRE RECOMMANDÉ :
+  1. Barcelona House (Ström)  → prestige, piscine, lumière parfaite
+  2. CAS Architecten (WULF)   → contemporain haut de gamme
+  3. I3F Arcueil              → référence client réel, collectif
+  4. Giboire Venelles         → référence client réel, jardins
+  5. Hidden Villa i29         → architecture signature
+  6. Façade londonienne       → originalité stylistique
+  NOTE : "Cabane automnale" retirée — trop rustique pour votre positionnement prestige
+  Si vous souhaitez la garder, ajoutez-la en dernière position
+-->
 <section id="exterieurs" style="background: var(--white);">
-  <!-- point 3 : "sélection" en or devant le titre, pas de ligne -->
   <div class="sec-head rv">
     <p class="sec-selection">sélection</p>
     <h2 class="sec-title">extérieurs</h2>
@@ -643,23 +732,35 @@ img { -webkit-user-drag: none; user-select: none; }
 
       <div class="g-item rv"
            data-src="assets/images/exterieurs/EXT-01-barcelona-house.jpg"
-           data-cap="barcelona house — ström architects · 3ds max · corona">
-        <img src="https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?w=800&q=80"
+           data-cap="Barcelona House — Ström Architects · 3ds Max · Corona">
+        <img src="assets/images/exterieurs/EXT-01-barcelona-house.jpg"
              alt="Barcelona House" loading="lazy" draggable="false">
         <div class="g-caption">
-          <div class="g-cap-title">barcelona house — ström architects</div>
+          <div class="g-cap-title">Barcelona House — Ström Architects</div>
           <div class="g-cap-tools">3ds max · corona · photoshop</div>
         </div>
         <div class="g-expand">+</div>
       </div>
 
       <div class="g-item rv"
+           data-src="assets/images/exterieurs/EXT-06-cas-architect.jpg"
+           data-cap="Résidence WULF — CAS Architecten · 3ds Max · V-Ray">
+        <img src="assets/images/exterieurs/EXT-06-cas-architect.jpg"
+             alt="Résidence WULF" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">Résidence WULF — CAS Architecten</div>
+          <div class="g-cap-tools">3ds max · v-ray · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
            data-src="assets/images/exterieurs/EXT-02-i3f-arcueil.jpg"
-           data-cap="logement collectif — i3f · arcueil · 3ds max · corona">
-        <img src="https://images.unsplash.com/photo-1582063289852-62e3ba2747f8?w=800&q=80"
+           data-cap="Logement collectif — I3F · Arcueil · 3ds Max · Corona">
+        <img src="assets/images/exterieurs/EXT-02-i3f-arcueil.jpg"
              alt="I3F Arcueil" loading="lazy" draggable="false">
         <div class="g-caption">
-          <div class="g-cap-title">logement collectif — i3f · arcueil</div>
+          <div class="g-cap-title">Logement collectif — I3F · Arcueil</div>
           <div class="g-cap-tools">3ds max · corona · photoshop</div>
         </div>
         <div class="g-expand">+</div>
@@ -667,11 +768,11 @@ img { -webkit-user-drag: none; user-select: none; }
 
       <div class="g-item rv"
            data-src="assets/images/exterieurs/EXT-03-giboire.jpg"
-           data-cap="résidentiel — giboire · paris venelles · 3ds max · v-ray">
-        <img src="https://images.unsplash.com/photo-1584738766473-61c083514bf4?w=800&q=80"
-             alt="Giboire" loading="lazy" draggable="false">
+           data-cap="Programme résidentiel — Giboire · Paris Venelles · 3ds Max · V-Ray">
+        <img src="assets/images/exterieurs/EXT-03-giboire.jpg"
+             alt="Giboire Venelles" loading="lazy" draggable="false">
         <div class="g-caption">
-          <div class="g-cap-title">résidentiel — giboire · paris venelles</div>
+          <div class="g-cap-title">Programme résidentiel — Giboire · Paris Venelles</div>
           <div class="g-cap-tools">3ds max · v-ray · photoshop</div>
         </div>
         <div class="g-expand">+</div>
@@ -679,35 +780,23 @@ img { -webkit-user-drag: none; user-select: none; }
 
       <div class="g-item rv"
            data-src="assets/images/exterieurs/EXT-04-hidden-villa.jpg"
-           data-cap="hidden villa — i29 architects · twinmotion">
-        <img src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?w=800&q=80"
+           data-cap="Hidden Villa — i29 Architects · Twinmotion">
+        <img src="assets/images/exterieurs/EXT-04-hidden-villa.jpg"
              alt="Hidden Villa" loading="lazy" draggable="false">
         <div class="g-caption">
-          <div class="g-cap-title">hidden villa — i29 architects</div>
+          <div class="g-cap-title">Hidden Villa — i29 Architects</div>
           <div class="g-cap-tools">3ds max · twinmotion · photoshop</div>
         </div>
         <div class="g-expand">+</div>
       </div>
 
       <div class="g-item rv"
-           data-src="assets/images/exterieurs/EXT-05-barcelona-piscine.jpg"
-           data-cap="barcelona house — vue piscine · ström architects">
-        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80"
-             alt="Piscine" loading="lazy" draggable="false">
+           data-src="assets/images/exterieurs/EXT-07-facade-londonienne.jpg"
+           data-cap="Façade londonienne · 3ds Max · Corona">
+        <img src="assets/images/exterieurs/EXT-07-facade-londonienne.jpg"
+             alt="Façade londonienne" loading="lazy" draggable="false">
         <div class="g-caption">
-          <div class="g-cap-title">barcelona house — vue piscine</div>
-          <div class="g-cap-tools">3ds max · corona · photoshop</div>
-        </div>
-        <div class="g-expand">+</div>
-      </div>
-
-      <div class="g-item rv"
-           data-src="assets/images/exterieurs/EXT-06-villa-contemporaine.jpg"
-           data-cap="villa contemporaine — étude extérieure · 3ds max · corona">
-        <img src="https://images.unsplash.com/photo-1571939228382-b2f2b585ce15?w=800&q=80"
-             alt="Villa contemporaine" loading="lazy" draggable="false">
-        <div class="g-caption">
-          <div class="g-cap-title">villa contemporaine — étude extérieure</div>
+          <div class="g-cap-title">Façade londonienne</div>
           <div class="g-cap-tools">3ds max · corona · photoshop</div>
         </div>
         <div class="g-expand">+</div>
@@ -717,13 +806,19 @@ img { -webkit-user-drag: none; user-select: none; }
   </div>
 </section>
 
-<!-- CONTACT — fond beige, "projet" en or (point 4) -->
+<!-- CONTACT -->
+<!-- FIX 5 : formulaire Formspree
+  ÉTAPES :
+  1. Allez sur formspree.io → créez un compte gratuit → New Form
+  2. Copiez l'ID fourni (ex: xpzgkwqr)
+  3. Remplacez VOTRE_ID_FORMSPREE ci-dessous par cet ID
+  4. Supprimez le onsubmit="return false" qui bloque le formulaire
+-->
 <section class="contact rv" id="contact">
   <div>
     <p class="eyebrow">contact</p>
-    <!-- point 4 : "projet" en couleur or -->
     <h2 class="contact-title">parlons de votre <em>projet</em></h2>
-    <p class="contact-sub">disponible pour missions ponctuelles et collaborations régulières. paris & full remote.</p>
+    <p class="contact-sub">Disponible pour missions ponctuelles et collaborations régulières.</p>
     <div class="ci-list">
       <a href="mailto:contact.stephaniemoltchanoff@gmail.com" class="ci">
         <div class="ci-dot"></div>
@@ -735,24 +830,30 @@ img { -webkit-user-drag: none; user-select: none; }
       </a>
     </div>
   </div>
+  <!--
+    Quand vous avez votre ID Formspree, remplacez la ligne form par :
+    <form class="form" action="https://formspree.io/f/VOTRE_ID_FORMSPREE" method="POST">
+    et ajoutez : <input type="hidden" name="_subject" value="Nouveau message — portfolio">
+    puis supprimez le onsubmit="return false"
+  -->
   <form class="form" onsubmit="return false">
+    <input type="hidden" name="_subject" value="Nouveau message — portfolio Stéphanie Moltchanoff">
     <div class="fl">
       <label>nom</label>
-      <input class="fi" type="text" placeholder="votre nom" autocomplete="name">
+      <input class="fi" type="text" name="nom" placeholder="votre nom" autocomplete="name">
     </div>
     <div class="fl">
       <label>email</label>
-      <input class="fi" type="email" placeholder="votre@email.com" autocomplete="email">
+      <input class="fi" type="email" name="email" placeholder="votre@email.com" autocomplete="email">
     </div>
     <div class="fl">
       <label>message</label>
-      <textarea class="ft" placeholder="décrivez votre projet en quelques lignes…"></textarea>
+      <textarea class="ft" name="message" placeholder="décrivez votre projet en quelques lignes…"></textarea>
     </div>
     <button class="fsub" type="submit">envoyer →</button>
   </form>
 </section>
 
-<!-- FOOTER — point 7 : fond blanc sobre -->
 <footer>
   <span class="fc">© 2026 stéphanie moltchanoff · tous droits réservés</span>
   <span class="fn">visualisation architecturale · paris</span>
@@ -776,7 +877,7 @@ document.querySelectorAll('a,button,.g-item,input,textarea').forEach(el=>{
   el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
 });
 
-/* ── NAV — point 1 : scroll listener ── */
+/* ── NAV ─────────────────────────────── */
 const nav = document.getElementById('nav');
 window.addEventListener('scroll',()=>{
   nav.classList.toggle('stuck', window.scrollY > 80);
