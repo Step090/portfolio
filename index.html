@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stéphanie Moltchanoff — Visualisation Architecturale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,500&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:      #575756;
+  --ink-deep: #3a3836;   /* point 6 : gris très foncé, jamais noir */
+  --ink-soft: #8a8988;
+  --ink-pale: #c4c2c0;
+  --beige:    #F5F2EE;
+  --white:    #FDFCFB;
+  --linen:    #E8E3DC;
+  --gold:     #B8996E;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 400;
+  background: var(--white);
+  color: var(--ink);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ─── CURSOR ──────────────────────────── */
+#cur-dot {
+  width: 6px; height: 6px;
+  background: var(--ink-deep);
+  border-radius: 50%;
+  position: fixed; pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: background .25s, transform .15s;
+}
+#cur-ring {
+  width: 30px; height: 30px;
+  border: 1px solid rgba(87,87,86,.28);
+  border-radius: 50%;
+  position: fixed; pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: width .3s, height .3s, border-color .3s;
+}
+body.hov #cur-dot  { background: var(--gold); transform: translate(-50%,-50%) scale(2); }
+body.hov #cur-ring { width: 48px; height: 48px; border-color: var(--gold); }
+body.lb-open #cur-dot  { background: rgba(255,255,255,.8); }
+body.lb-open #cur-ring { border-color: rgba(255,255,255,.28); }
+
+/* ─── NAV — point 1 : transparent → solid au scroll ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 28px 52px;
+  transition: background .4s, padding .4s, border-color .4s;
+}
+nav.stuck {
+  background: rgba(253,252,251,.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 18px 52px;
+  border-bottom-color: var(--linen);
+}
+.nav-l, .nav-r { display: flex; gap: 36px; list-style: none; }
+.nav-r { justify-content: flex-end; }
+nav a {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: rgba(255,255,255,.7); text-decoration: none;
+  transition: color .2s;
+}
+nav a:hover { color: rgba(255,255,255,1); }
+nav.stuck a { color: var(--ink-soft); }
+nav.stuck a:hover { color: var(--ink-deep); }
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 15px; font-weight: 400;
+  letter-spacing: 1px; text-align: center;
+  color: rgba(255,255,255,.9); text-decoration: none;
+  transition: color .3s;
+}
+nav.stuck .nav-logo { color: var(--ink-deep); }
+
+/* ─── HERO ────────────────────────────── */
+.hero {
+  height: 100vh; min-height: 580px;
+  position: relative; overflow: hidden;
+  display: flex; align-items: flex-end;
+  padding: 0 52px 72px;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=2200&q=85') center/cover no-repeat;
+  will-change: transform;
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(172deg,
+    rgba(28,26,24,.04) 0%,
+    rgba(28,26,24,.10) 45%,
+    rgba(28,26,24,.52) 100%);
+}
+.hero-content { position: relative; z-index: 1; }
+.hero-label {
+  font-size: 9px; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 14px;
+  opacity: 0; transform: translateY(14px);
+  animation: up .8s .3s forwards;
+}
+/* point 2 : retour à la ligne après "racontent" */
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 400;
+  font-size: clamp(36px, 4.5vw, 62px);
+  line-height: 1.1; color: var(--white);
+  opacity: 0; transform: translateY(18px);
+  animation: up .9s .5s forwards;
+}
+
+@keyframes up { to { opacity:1; transform:translateY(0); } }
+
+/* ─── ABOUT — fond beige ──────────────── */
+.about {
+  background: var(--beige);
+  display: grid; grid-template-columns: 5fr 7fr;
+}
+.about-img {
+  background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80') center/cover;
+  min-height: 440px;
+}
+.about-body {
+  padding: 72px 64px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.eyebrow {
+  font-size: 9px; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 16px;
+}
+.about-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 400;
+  font-size: 30px; line-height: 1.35;
+  color: var(--ink-deep); margin-bottom: 22px;
+}
+.about-text {
+  font-size: 13px; font-weight: 300; line-height: 1.9;
+  color: var(--ink); max-width: 400px; margin-bottom: 30px;
+}
+.about-text strong { font-weight: 500; color: var(--ink-deep); }
+.cta-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 10px; font-weight: 500; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--ink-deep);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink-pale);
+  padding-bottom: 3px; width: fit-content;
+  transition: color .2s, border-color .2s;
+}
+.cta-link:hover { color: var(--gold); border-color: var(--gold); }
+.cta-link .arr { transition: transform .2s; }
+.cta-link:hover .arr { transform: translateX(5px); }
+
+/* ─── SECTION HEADER ──────────────────── */
+/* point 3 : "sélection" en or, pas de ligne sous le titre */
+.sec-head {
+  padding: 60px 52px 18px;
+  /* pas de border-bottom */
+}
+.sec-selection {
+  font-size: 9px; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 8px;
+}
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 400;
+  font-size: 36px; color: var(--ink-deep);
+}
+
+/* ─── GALLERY — fond blanc ────────────── */
+.gallery-wrap {
+  background: var(--white);
+  padding: 20px 52px 52px;
+}
+
+/* ─── CSS COLUMNS — ratio naturel ────── */
+/* point 12 confirmé : les images gardent leur ratio naturel */
+.gallery-cols {
+  column-count: 3;
+  column-gap: 16px;
+}
+.g-item {
+  break-inside: avoid;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  display: block;
+  cursor: none;
+  /* force le contexte de positionnement */
+  transform: translateZ(0);
+}
+.g-item img {
+  width: 100%; height: auto;
+  display: block;
+  transition: transform .65s cubic-bezier(.25,.46,.45,.94);
+  -webkit-user-drag: none;
+  user-select: none;
+  /* pas de pointer-events: none ici → hover sur .g-item reste fiable */
+}
+.g-item:hover img { transform: scale(1.04); }
+
+/* point 5 : légendes — fond gris foncé (point 6 aussi) */
+/* point 6 : rgba(55,53,52) = gris très foncé, pas noir */
+.g-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(55,53,52,0.80);
+  padding: 16px 16px 14px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .3s ease, transform .3s ease;
+  z-index: 2;
+  will-change: opacity, transform;
+}
+.g-item:hover .g-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+.g-cap-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 12.5px;
+  color: rgba(255,255,255,.92);
+  margin-bottom: 4px; line-height: 1.3;
+}
+.g-cap-tools {
+  font-size: 9px; letter-spacing: 1.8px;
+  text-transform: uppercase; color: rgba(255,255,255,.5);
+}
+/* petit bouton + visible au hover */
+.g-expand {
+  position: absolute; top: 12px; right: 12px;
+  width: 26px; height: 26px;
+  background: rgba(55,53,52,.55);
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--white);
+  opacity: 0; transition: opacity .28s;
+  z-index: 3;
+}
+.g-item:hover .g-expand { opacity: 1; }
+
+/* ─── LIGHTBOX ────────────────────────── */
+#lb {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(30,28,26,.96);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s;
+}
+#lb.open { opacity: 1; pointer-events: all; }
+#lb-img {
+  max-width: 88vw; max-height: 86vh;
+  object-fit: contain;
+  transform: scale(.95);
+  transition: transform .35s cubic-bezier(.25,.46,.45,.94);
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+#lb.open #lb-img { transform: scale(1); }
+#lb-cap {
+  position: absolute; bottom: 24px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; color: rgba(255,255,255,.38);
+  white-space: nowrap; text-align: center;
+}
+#lb-close {
+  position: absolute; top: 22px; right: 28px;
+  font-size: 20px; color: rgba(255,255,255,.5);
+  background: none; border: none; cursor: none;
+  transition: color .2s; line-height: 1;
+}
+#lb-close:hover { color: var(--white); }
+#lb-prev, #lb-next {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: none;
+  font-size: 30px; color: rgba(255,255,255,.35);
+  transition: color .2s; padding: 8px; line-height: 1;
+}
+#lb-prev { left: 28px; }
+#lb-next { right: 28px; }
+#lb-prev:hover, #lb-next:hover { color: var(--white); }
+#lb-n {
+  position: absolute; top: 24px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px; letter-spacing: 3px; color: rgba(255,255,255,.28);
+}
+
+/* ─── MEDIA SECTION ──────────────────── */
+.media-section {
+  background: var(--ink-deep);
+  padding: 68px 52px;
+}
+.media-section .eyebrow { margin-bottom: 12px; }
+.media-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 400;
+  font-size: 32px; color: var(--white);
+  margin-bottom: 36px;
+}
+.media-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.media-block iframe,
+.media-block video {
+  width: 100%; height: 460px;
+  border: none; display: block;
+}
+.media-lbl {
+  margin-top: 10px;
+  font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; color: rgba(255,255,255,.3);
+}
+
+/* ─── CONTACT ─────────────────────────── */
+/* fond beige · pas de téléphone */
+.contact {
+  background: var(--beige);
+  padding: 88px 52px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 72px; align-items: start;
+}
+/* point 4 : "projet" reste en or via <em> */
+.contact-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 400;
+  font-size: 42px; line-height: 1.15;
+  color: var(--ink-deep); margin-bottom: 16px;
+}
+.contact-title em { color: var(--gold); font-style: italic; }
+.contact-sub {
+  font-size: 13px; font-weight: 300; line-height: 1.85;
+  color: var(--ink); margin-bottom: 32px; max-width: 360px;
+}
+.ci-list { display: flex; flex-direction: column; gap: 12px; }
+.ci {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 13px; color: var(--ink);
+  text-decoration: none; transition: color .2s;
+}
+.ci:hover { color: var(--gold); }
+.ci-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+.form { display: flex; flex-direction: column; gap: 20px; }
+.fl { display: flex; flex-direction: column; gap: 6px; }
+.fl label {
+  font-size: 9px; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--ink-pale); font-weight: 500;
+}
+.fi, .ft {
+  background: transparent; border: none;
+  border-bottom: 1px solid var(--linen);
+  padding: 9px 0;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 13px; font-weight: 300; color: var(--ink-deep);
+  outline: none; transition: border-color .2s; cursor: none;
+}
+.fi:focus, .ft:focus { border-bottom-color: var(--gold); }
+.ft { resize: none; min-height: 68px; }
+.fsub {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--ink-deep); color: var(--white);
+  border: none; padding: 14px 28px; margin-top: 4px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 10px; font-weight: 500; letter-spacing: 2.5px;
+  text-transform: uppercase; cursor: none; width: fit-content;
+  transition: background .2s;
+}
+.fsub:hover { background: var(--gold); }
+
+/* ─── FOOTER — point 7 : blanc sobre ─── */
+footer {
+  background: var(--white);
+  border-top: 1px solid var(--linen);
+  padding: 24px 52px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.fc {
+  font-size: 10px; letter-spacing: 1px;
+  color: var(--ink-pale);      /* gris clair, pas noir */
+}
+.fn {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 12px; letter-spacing: 1px;
+  color: var(--ink-soft);
+}
+
+/* ─── REVEAL ────────────────────────────── */
+.rv { opacity:0; transform:translateY(20px);
+  transition: opacity .7s ease, transform .7s ease; }
+.rv.vis { opacity:1; transform:none; }
+
+/* ─── RESPONSIVE ───────────────────────── */
+@media (max-width: 1024px) {
+  .gallery-cols { column-count: 2; }
+}
+@media (max-width: 768px) {
+  nav { grid-template-columns: 1fr 1fr; padding: 20px 24px; }
+  nav.stuck { padding: 14px 24px; }
+  .nav-r { display: none; }
+  .nav-logo { text-align: left; }
+  .hero { padding: 0 24px 52px; }
+  .about { grid-template-columns: 1fr; }
+  .about-img { min-height: 260px; }
+  .about-body { padding: 48px 24px; }
+  .gallery-wrap { padding: 16px 24px 36px; }
+  .gallery-cols { column-count: 1; }
+  .sec-head { padding: 48px 24px 16px; }
+  .media-section { padding: 52px 24px; }
+  .media-grid { grid-template-columns: 1fr; }
+  .contact { grid-template-columns: 1fr; gap: 48px; padding: 60px 24px; }
+  footer { padding: 18px 24px; flex-direction: column; gap: 6px; text-align: center; }
+}
+
+/* ─── PROTECTIONS IMAGES ───────────────── */
+/* pas de pointer-events:none global sur img — cf. note dans le JS */
+img { -webkit-user-drag: none; user-select: none; }
+</style>
+</head>
+<body>
+
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<!-- LIGHTBOX -->
+<div id="lb">
+  <button id="lb-close" aria-label="Fermer">✕</button>
+  <button id="lb-prev" aria-label="Précédent">‹</button>
+  <img id="lb-img" src="" alt="" draggable="false">
+  <div id="lb-cap"></div>
+  <div id="lb-n"></div>
+  <button id="lb-next" aria-label="Suivant">›</button>
+</div>
+
+<!-- NAV — point 1 : transparent au départ -->
+<nav id="nav">
+  <ul class="nav-l">
+    <li><a href="#interieurs">intérieurs</a></li>
+    <li><a href="#exterieurs">extérieurs</a></li>
+  </ul>
+  <a href="#top" class="nav-logo">stéphanie moltchanoff</a>
+  <ul class="nav-r">
+    <li><a href="#immersif">360° & vidéo</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-label">visualisation architecturale · paris & remote</p>
+    <!-- point 2 : retour à la ligne après "racontent" -->
+    <h1 class="hero-title">images qui racontent<br>l'espace</h1>
+  </div>
+</section>
+
+<!-- ABOUT — fond beige -->
+<section class="about rv" id="about">
+  <div class="about-img"></div>
+  <div class="about-body">
+    <p class="eyebrow">à propos</p>
+    <h2 class="about-title">double regard,<br>une seule image juste</h2>
+    <p class="about-text">
+      <strong>architecte d.e.</strong> et infographiste 3d, je traduis les projets de design et d'architecture en images qui racontent l'espace autant qu'elles le montrent.<br><br>
+      six années d'expérience dont quatre à piloter un pôle image pour la promotion résidentielle haut de gamme. ma démarche se concentre sur la lumière naturelle, les matériaux et la justesse des proportions.
+    </p>
+    <a href="assets/book-stephanie-moltchanoff-2026.pdf" class="cta-link" download>
+      télécharger le book 2026 <span class="arr">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- INTÉRIEURS -->
+<section id="interieurs" style="background: var(--white);">
+  <!-- point 3 : "sélection" en or devant le titre, pas de ligne -->
+  <div class="sec-head rv">
+    <p class="sec-selection">sélection</p>
+    <h2 class="sec-title">intérieurs</h2>
+  </div>
+  <div class="gallery-wrap">
+    <div class="gallery-cols" id="gInt">
+
+      <div class="g-item rv"
+           data-src="assets/images/interieurs/INT-01-suite-prune.jpg"
+           data-cap="suite parentale — tonalité prune · 3ds max · corona">
+        <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&q=80"
+             alt="Suite parentale" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">suite parentale — tonalité prune</div>
+          <div class="g-cap-tools">3ds max · corona · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/interieurs/INT-02-harley-graham.jpg"
+           data-cap="résidence mona lane — harley graham architects · 3ds max · corona">
+        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80"
+             alt="Harley Graham" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">résidence mona lane — harley graham architects</div>
+          <div class="g-cap-tools">3ds max · corona · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/interieurs/INT-03-salle-de-bain-figr.jpg"
+           data-cap="salle de bain — figr architecture · 3ds max · corona">
+        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80"
+             alt="Salle de bain FIGR" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">salle de bain — figr architecture</div>
+          <div class="g-cap-tools">3ds max · corona · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/interieurs/INT-04-salon-arche.jpg"
+           data-cap="salon arche — étude composition · 3ds max · corona">
+        <img src="https://images.unsplash.com/photo-1615529162924-f8605388461d?w=800&q=80"
+             alt="Salon arche" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">salon arche — étude composition</div>
+          <div class="g-cap-tools">3ds max · corona · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/interieurs/INT-05-eterna-bordeaux.jpg"
+           data-cap="programme eterna — promoteur ideal · bordeaux · blender · cycles">
+        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80"
+             alt="Eterna Bordeaux" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">programme eterna — promoteur ideal · bordeaux</div>
+          <div class="g-cap-tools">blender · cycles · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/interieurs/INT-06-salon-japandi.jpg"
+           data-cap="salon japandi — étude ambiance · 3ds max · corona">
+        <img src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=800&q=80"
+             alt="Salon Japandi" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">salon japandi — étude ambiance</div>
+          <div class="g-cap-tools">3ds max · corona · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/interieurs/INT-07-eterna-cuisine.jpg"
+           data-cap="programme eterna — cuisine ouverte · blender · cycles">
+        <img src="https://images.unsplash.com/photo-1556909172-54557c7e4fb7?w=800&q=80"
+             alt="Cuisine Eterna" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">programme eterna — cuisine ouverte</div>
+          <div class="g-cap-tools">blender · cycles · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/interieurs/INT-08-salon-moderne.jpg"
+           data-cap="salon moderne — étude lumière · 3ds max · corona">
+        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80"
+             alt="Salon moderne" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">salon moderne — étude lumière</div>
+          <div class="g-cap-tools">3ds max · corona · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 360° & VIDÉO — entre intérieurs et extérieurs -->
+<section class="media-section rv" id="immersif">
+  <p class="eyebrow">expériences immersives</p>
+  <h2 class="media-title">360° & vidéo</h2>
+  <div class="media-grid">
+    <div class="media-block">
+      <iframe
+        src="https://step090.github.io/Appartement-360-Salon/"
+        allowfullscreen
+        title="Visite virtuelle 360°">
+      </iframe>
+      <p class="media-lbl">visite virtuelle 360° — salon · blender</p>
+    </div>
+    <div class="media-block">
+      <!-- YouTube → remplacez VOTRE_ID par l'id dans l'URL après ?v= -->
+      <!-- <iframe src="https://www.youtube.com/embed/VOTRE_ID" allowfullscreen></iframe> -->
+      <!-- Fichier local → décommentez ci-dessous -->
+      <video controls poster="assets/images/video-poster.jpg">
+        <source src="assets/video/configurateur.mp4" type="video/mp4">
+      </video>
+      <p class="media-lbl">configurateur de finitions — programme résidentiel</p>
+    </div>
+  </div>
+</section>
+
+<!-- EXTÉRIEURS -->
+<section id="exterieurs" style="background: var(--white);">
+  <!-- point 3 : "sélection" en or devant le titre, pas de ligne -->
+  <div class="sec-head rv">
+    <p class="sec-selection">sélection</p>
+    <h2 class="sec-title">extérieurs</h2>
+  </div>
+  <div class="gallery-wrap">
+    <div class="gallery-cols" id="gExt">
+
+      <div class="g-item rv"
+           data-src="assets/images/exterieurs/EXT-01-barcelona-house.jpg"
+           data-cap="barcelona house — ström architects · 3ds max · corona">
+        <img src="https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?w=800&q=80"
+             alt="Barcelona House" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">barcelona house — ström architects</div>
+          <div class="g-cap-tools">3ds max · corona · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/exterieurs/EXT-02-i3f-arcueil.jpg"
+           data-cap="logement collectif — i3f · arcueil · 3ds max · corona">
+        <img src="https://images.unsplash.com/photo-1582063289852-62e3ba2747f8?w=800&q=80"
+             alt="I3F Arcueil" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">logement collectif — i3f · arcueil</div>
+          <div class="g-cap-tools">3ds max · corona · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/exterieurs/EXT-03-giboire.jpg"
+           data-cap="résidentiel — giboire · paris venelles · 3ds max · v-ray">
+        <img src="https://images.unsplash.com/photo-1584738766473-61c083514bf4?w=800&q=80"
+             alt="Giboire" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">résidentiel — giboire · paris venelles</div>
+          <div class="g-cap-tools">3ds max · v-ray · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/exterieurs/EXT-04-hidden-villa.jpg"
+           data-cap="hidden villa — i29 architects · twinmotion">
+        <img src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?w=800&q=80"
+             alt="Hidden Villa" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">hidden villa — i29 architects</div>
+          <div class="g-cap-tools">3ds max · twinmotion · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/exterieurs/EXT-05-barcelona-piscine.jpg"
+           data-cap="barcelona house — vue piscine · ström architects">
+        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80"
+             alt="Piscine" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">barcelona house — vue piscine</div>
+          <div class="g-cap-tools">3ds max · corona · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+      <div class="g-item rv"
+           data-src="assets/images/exterieurs/EXT-06-villa-contemporaine.jpg"
+           data-cap="villa contemporaine — étude extérieure · 3ds max · corona">
+        <img src="https://images.unsplash.com/photo-1571939228382-b2f2b585ce15?w=800&q=80"
+             alt="Villa contemporaine" loading="lazy" draggable="false">
+        <div class="g-caption">
+          <div class="g-cap-title">villa contemporaine — étude extérieure</div>
+          <div class="g-cap-tools">3ds max · corona · photoshop</div>
+        </div>
+        <div class="g-expand">+</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT — fond beige, "projet" en or (point 4) -->
+<section class="contact rv" id="contact">
+  <div>
+    <p class="eyebrow">contact</p>
+    <!-- point 4 : "projet" en couleur or -->
+    <h2 class="contact-title">parlons de votre <em>projet</em></h2>
+    <p class="contact-sub">disponible pour missions ponctuelles et collaborations régulières. paris & full remote.</p>
+    <div class="ci-list">
+      <a href="mailto:contact.stephaniemoltchanoff@gmail.com" class="ci">
+        <div class="ci-dot"></div>
+        contact.stephaniemoltchanoff@gmail.com
+      </a>
+      <a href="https://stephaniemoltchanoff.com" class="ci">
+        <div class="ci-dot"></div>
+        stephaniemoltchanoff.com
+      </a>
+    </div>
+  </div>
+  <form class="form" onsubmit="return false">
+    <div class="fl">
+      <label>nom</label>
+      <input class="fi" type="text" placeholder="votre nom" autocomplete="name">
+    </div>
+    <div class="fl">
+      <label>email</label>
+      <input class="fi" type="email" placeholder="votre@email.com" autocomplete="email">
+    </div>
+    <div class="fl">
+      <label>message</label>
+      <textarea class="ft" placeholder="décrivez votre projet en quelques lignes…"></textarea>
+    </div>
+    <button class="fsub" type="submit">envoyer →</button>
+  </form>
+</section>
+
+<!-- FOOTER — point 7 : fond blanc sobre -->
+<footer>
+  <span class="fc">© 2026 stéphanie moltchanoff · tous droits réservés</span>
+  <span class="fn">visualisation architecturale · paris</span>
+</footer>
+
+<script>
+/* ── CURSOR ─────────────────────────── */
+const dot = document.getElementById('cur-dot');
+const ring = document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e=>{
+  mx=e.clientX; my=e.clientY;
+  dot.style.left=mx+'px'; dot.style.top=my+'px';
+});
+(function loop(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button,.g-item,input,textarea').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+});
+
+/* ── NAV — point 1 : scroll listener ── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('stuck', window.scrollY > 80);
+},{passive:true});
+
+/* ── PARALLAX HERO ───────────────────── */
+const heroBg = document.getElementById('heroBg');
+window.addEventListener('scroll',()=>{
+  heroBg.style.transform=`translateY(${window.scrollY*.28}px)`;
+},{passive:true});
+
+/* ── SCROLL REVEAL ───────────────────── */
+const rvObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('vis'); rvObs.unobserve(e.target); }
+  });
+},{threshold:.08, rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.rv').forEach(el=>rvObs.observe(el));
+
+/* ── LIGHTBOX ────────────────────────── */
+const lb    = document.getElementById('lb');
+const lbImg = document.getElementById('lb-img');
+const lbCap = document.getElementById('lb-cap');
+const lbN   = document.getElementById('lb-n');
+let items=[],idx=0;
+
+function openLb(list,i){ items=list; idx=i; render();
+  lb.classList.add('open'); document.body.classList.add('lb-open'); }
+function render(){
+  lbImg.src=items[idx].src; lbCap.textContent=items[idx].cap;
+  lbN.textContent=(idx+1)+' / '+items.length;
+}
+function closeLb(){
+  lb.classList.remove('open'); document.body.classList.remove('lb-open');
+  setTimeout(()=>lbImg.src='',320);
+}
+document.getElementById('lb-close').onclick=closeLb;
+document.getElementById('lb-prev').onclick=()=>{ idx=(idx-1+items.length)%items.length; render(); };
+document.getElementById('lb-next').onclick=()=>{ idx=(idx+1)%items.length; render(); };
+lb.addEventListener('click',e=>{ if(e.target===lb) closeLb(); });
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('open')) return;
+  if(e.key==='Escape') closeLb();
+  if(e.key==='ArrowLeft'){ idx=(idx-1+items.length)%items.length; render(); }
+  if(e.key==='ArrowRight'){ idx=(idx+1)%items.length; render(); }
+});
+
+function bindGallery(id){
+  const els=[...document.querySelectorAll(`#${id} .g-item`)];
+  const data=els.map(el=>({ src:el.dataset.src||el.querySelector('img').src, cap:el.dataset.cap||'' }));
+  els.forEach((el,i)=>el.addEventListener('click',()=>openLb(data,i)));
+}
+bindGallery('gInt');
+bindGallery('gExt');
+
+/* ── NO RIGHT-CLICK ──────────────────── */
+document.addEventListener('contextmenu',e=>e.preventDefault());
+</script>
+</body>
+</html>
