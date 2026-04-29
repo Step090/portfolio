@@ -476,7 +476,7 @@ img{-webkit-user-drag:none;user-select:none}
     </div>
   </div>
   <!-- Formspree : remplacez onsubmit par action="https://formspree.io/f/VOTRE_ID" method="POST" -->
-  <form class="form" action="https://api.web3forms.com/submit" method="POST">
+  <form class="form" id="contactForm">
   <input type="hidden" name="access_key" value="16d9c454-c102-47c9-9e68-8388b1a4d715">
   <input type="hidden" name="subject" value="Nouveau message — portfolio Stéphanie Moltchanoff">
   <input type="hidden" name="from_name" value="Portfolio Stéphanie Moltchanoff">
@@ -563,7 +563,49 @@ bindGallery('gInt');bindGallery('gExt');
 document.querySelectorAll('.g-featured').forEach(el=>{
   el.addEventListener('click',()=>openLb([{src:el.dataset.src||el.querySelector('img').src,cap:el.dataset.cap||''}],0));
 });
-document.addEventListener('contextmenu',e=>e.preventDefault());
+/* FORMULAIRE — soumission AJAX sans quitter la page */
+const form = document.getElementById('contactForm');
+const fsub = form.querySelector('.fsub');
+
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  fsub.textContent = 'envoi en cours…';
+  fsub.style.opacity = '.6';
+  fsub.disabled = true;
+
+  const data = new FormData(form);
+
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: data
+    });
+    const json = await res.json();
+
+    if (json.success) {
+      form.innerHTML = `
+        <div style="
+          padding: 32px 0;
+          font-family: 'Playfair Display', serif;
+          font-style: italic;
+          font-size: 20px;
+          color: var(--ink-deep);
+          line-height: 1.5;
+        ">
+          message envoyé —<br>je vous réponds dans les meilleurs délais.
+        </div>`;
+    } else {
+      fsub.textContent = 'erreur — réessayez';
+      fsub.style.opacity = '1';
+      fsub.disabled = false;
+    }
+  } catch(err) {
+    fsub.textContent = 'erreur — réessayez';
+    fsub.style.opacity = '1';
+    fsub.disabled = false;
+  }
+});document.addEventListener('contextmenu',e=>e.preventDefault());
 </script>
 </body>
 </html>
