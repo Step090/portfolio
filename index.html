@@ -245,7 +245,8 @@ footer{
 @media(max-width:768px){
   nav{grid-template-columns:1fr 1fr;padding:20px 24px}
   nav.stuck{padding:14px 24px}
-  .nav-r{display:none}.nav-logo{text-align:left}
+  nav{grid-template-columns:1fr auto}.nav-l{display:none}.nav-r li:not(:last-child){display:none}
+  .nav-logo{text-align:left;font-size:15px;letter-spacing:2px;white-space:nowrap}
   .hero{padding:0 24px 52px}
   .about{grid-template-columns:1fr}.about-img{min-height:260px}.about-body{padding:48px 24px}
   .gallery-wrap{padding:16px 24px 36px}
