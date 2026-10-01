@@ -115,7 +115,10 @@ nav.stuck .nav-logo{color:var(--ink-deep)}
 #lb.open{opacity:1;pointer-events:all}
 #lb-img{max-width:88vw;max-height:86vh;object-fit:contain;transform:scale(.95);transition:transform .35s cubic-bezier(.25,.46,.45,.94);pointer-events:none;-webkit-user-drag:none}
 #lb.open #lb-img{transform:scale(1)}
-#lb-cap{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.38);white-space:nowrap;text-align:center}
+#lb-cap{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.38);width:max-content;max-width:80vw;line-height:1.7;text-align:center}
+#lb-link{position:absolute;top:22px;left:28px;background:none;border:none;cursor:none;font-family:'Quicksand',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35);transition:color .2s}
+#lb-link:hover{color:var(--white)}
+#lb.single #lb-prev,#lb.single #lb-next,#lb.single #lb-n{display:none}
 #lb-close{position:absolute;top:22px;right:28px;font-size:20px;color:rgba(255,255,255,.5);background:none;border:none;cursor:none;transition:color .2s;line-height:1}
 #lb-close:hover{color:var(--white)}
 #lb-prev,#lb-next{position:absolute;top:50%;transform:translateY(-50%);background:none;border:none;cursor:none;font-size:30px;color:rgba(255,255,255,.35);transition:color .2s;padding:8px;line-height:1}
@@ -254,6 +257,7 @@ img{-webkit-user-drag:none;user-select:none}
 
 <div id="lb">
   <button id="lb-close">✕</button>
+  <button id="lb-link">copier le lien</button>
   <button id="lb-prev">‹</button>
   <img id="lb-img" src="" alt="" draggable="false">
   <div id="lb-cap"></div>
@@ -315,65 +319,100 @@ img{-webkit-user-drag:none;user-select:none}
   <div class="gallery-wrap">
     <div class="gallery-grid-4" id="gInt">
 
-<div class="g-item rv" data-src="assets/images/interieurs/INT-02-harley-graham.jpg" data-cap="Étude architecturale · d'après Harley Graham Architects · 3ds Max · Corona">
+<!-- ════ MODÈLE SÉRIE — copiez ce bloc (sans les lignes de commentaire) pour chaque nouvelle série ════
+  data-id     : identifiant du lien → stephaniemoltchanoff.com/#nom-du-projet
+                (minuscules, tirets, sans accents, unique sur tout le site)
+  data-images : les rendus plein écran, dans l'ordre, séparés par |
+                → #nom-du-projet-2 ouvre directement le 2e rendu
+  img src     : la vignette assemblée 1800 × 1200 px
+
+<div class="g-item rv" data-id="nom-du-projet"
+     data-images="assets/images/interieurs/INT-XX-nom-du-projet-1.jpg|assets/images/interieurs/INT-XX-nom-du-projet-2.jpg|assets/images/interieurs/INT-XX-nom-du-projet-3.jpg"
+     data-cap="Étude architecturale · Nom du projet · d'après [architecte] · 3ds Max · Corona · Photoshop">
+  <img src="assets/images/interieurs/INT-XX-nom-du-projet-vignette.jpg" alt="Nom du projet" loading="lazy" draggable="false">
+  <div class="g-caption"><div class="g-cap-title">Nom du projet · d'après [architecte]</div><div class="g-cap-tools">3ds max · corona · photoshop</div></div>
+  <div class="g-expand">+</div>
+</div>
+═══════════════════════════════════════════════════════════════════════════ -->
+
+<div class="g-item rv" data-src="assets/images/interieurs/INT-02-harley-graham.jpg" data-id="harley-graham" data-cap="Étude architecturale · Intérieur · d'après Harley Graham Architects · 3ds Max · Corona · Photoshop">
   <img src="assets/images/interieurs/INT-02-harley-graham.jpg" alt="Harley Graham" loading="lazy" draggable="false">
-  <div class="g-caption"><div class="g-cap-title">Étude architecturale · d'après Harley Graham Architects</div><div class="g-cap-tools">3ds max · corona · photoshop</div></div>
+  <div class="g-caption"><div class="g-cap-title">Intérieur · d'après Harley Graham Architects</div><div class="g-cap-tools">3ds max · corona · photoshop</div></div>
   <div class="g-expand">+</div>
 </div>
 
-<div class="g-item rv" data-src="assets/images/interieurs/INT-08-salon-moderne.jpg" data-cap="Salon moderne — Étude lumière · 3ds Max · Corona">
-  <img src="assets/images/interieurs/INT-08-salon-moderne.jpg" alt="Salon moderne" loading="lazy" draggable="false">
-  <div class="g-caption"><div class="g-cap-title">Salon moderne - Étude lumière</div><div class="g-cap-tools">3ds max · corona · photoshop</div></div>
+<div class="g-item rv" data-src="assets/images/interieurs/INT-08-salon-moderne-1.jpg" data-id="salon-moderne" data-cap="Salon moderne · Étude de lumière · 3ds Max · Corona · Photoshop">
+  <img src="assets/images/interieurs/INT-08-salon-moderne-vignette.jpg" alt="Salon moderne" loading="lazy" draggable="false">
+  <div class="g-caption"><div class="g-cap-title">Salon moderne - Étude de lumière</div><div class="g-cap-tools">3ds max · corona · photoshop</div></div>
   <div class="g-expand">+</div>
 </div>
 
-<div class="g-item rv" data-src="assets/images/interieurs/INT-04-salon-arche.jpg" data-cap="Salon arche — Étude de lumière · 3ds Max · Corona">
-  <img src="assets/images/interieurs/INT-04-salon-arche.jpg" alt="Salon arche" loading="lazy" draggable="false">
-  <div class="g-caption"><div class="g-cap-title">Salon arche - Étude de lumière</div><div class="g-cap-tools">3ds max · corona · photoshop</div></div>
+<div class="g-item rv" data-id="suite-prune"
+     data-images="assets/images/interieurs/INT-01-suite-prune-1.jpg|assets/images/interieurs/INT-01-suite-prune-3.jpg"
+     data-cap="Suite parentale · Étude de lumière · 3ds Max · Corona · Magnific AI · Photoshop">
+  <img src="assets/images/interieurs/INT-01-suite-prune-vignette.jpg" alt="Suite parentale" loading="lazy" draggable="false">
+  <div class="g-caption"><div class="g-cap-title">Suite parentale - Étude de lumière</div><div class="g-cap-tools">3ds max · corona · magnific ai · photoshop</div></div>
   <div class="g-expand">+</div>
 </div>
 
-<div class="g-item rv" data-src="assets/images/interieurs/INT-06-salon-japandi.jpg" data-cap="Salon Japandi — Étude d'ambiance · 3ds Max · Corona">
+<div class="g-item rv" data-src="assets/images/interieurs/INT-03-salle-de-bain-figr-1.jpg" data-id="salle-de-bain-figr" data-cap="Étude architecturale · Salle de bain · d'après FIGR Architecture · 3ds Max · Corona · Photoshop">
+  <img src="assets/images/interieurs/INT-03-salle-de-bain-figr-vignette.jpg" alt="Salle de bain FIGR" loading="lazy" draggable="false">
+  <div class="g-caption"><div class="g-cap-title">Salle de bain · d'après FIGR Architecture</div><div class="g-cap-tools">3ds max · corona · photoshop</div></div>
+  <div class="g-expand">+</div>
+</div>
+
+<div class="g-item rv" data-id="salle-reunion"
+     data-images="assets/images/interieurs/INT-12-salle-reunion-1.jpg|assets/images/interieurs/INT-12-salle-reunion-2.jpg|assets/images/interieurs/INT-12-salle-reunion-3.jpg"
+     data-cap="Étude architecturale · Siège Furniture.com, New York · d'après Elmo Studios · 3ds Max · Corona · Magnific AI · Photoshop">
+  <img src="assets/images/interieurs/INT-12-salle-reunion-vignette.jpg" alt="Siège Furniture.com New York" loading="lazy" draggable="false">
+  <div class="g-caption"><div class="g-cap-title">Siège Furniture.com, New York · d'après Elmo Studios</div><div class="g-cap-tools">3ds max · corona · magnific ai · photoshop</div></div>
+  <div class="g-expand">+</div>
+</div>
+
+<div class="g-item rv" data-id="sdb-noir"
+     data-images="assets/images/interieurs/INT-13-sdb-noir-1.jpg|assets/images/interieurs/INT-13-sdb-noir-2.jpg|assets/images/interieurs/INT-13-sdb-noir-3.jpg|assets/images/interieurs/INT-13-sdb-noir-4.jpg"
+     data-cap="Salle de bain noire · Étude de lumière · 3ds Max · Corona · Magnific AI · Photoshop">
+  <img src="assets/images/interieurs/INT-13-sdb-noir-vignette.jpg" alt="Salle de bain noire" loading="lazy" draggable="false">
+  <div class="g-caption"><div class="g-cap-title">Salle de bain noire - Étude de lumière</div><div class="g-cap-tools">3ds max · corona · magnific ai · photoshop</div></div>
+  <div class="g-expand">+</div>
+</div>
+
+<div class="g-item rv" data-src="assets/images/interieurs/INT-06-salon-japandi.jpg" data-id="salon-japandi" data-cap="Salon Japandi · Étude d'ambiance · 3ds Max · Corona · Photoshop">
   <img src="assets/images/interieurs/INT-06-salon-japandi.jpg" alt="Salon Japandi" loading="lazy" draggable="false">
   <div class="g-caption"><div class="g-cap-title">Salon Japandi - Étude d'ambiance</div><div class="g-cap-tools">3ds max · corona · photoshop</div></div>
   <div class="g-expand">+</div>
 </div>
 
-<div class="g-item rv" data-src="assets/images/interieurs/INT-03-salle-de-bain-figr.jpg" data-cap="Étude architecturale · d'après FIGR Architecture · 3ds Max · Corona">
-  <img src="assets/images/interieurs/INT-03-salle-de-bain-figr.jpg" alt="Salle de bain FIGR" loading="lazy" draggable="false">
-  <div class="g-caption"><div class="g-cap-title">Étude architecturale · d'après FIGR Architecture</div><div class="g-cap-tools">3ds max · corona · photoshop</div></div>
-  <div class="g-expand">+</div>
-</div>
-
-<div class="g-item rv" data-src="assets/images/interieurs/INT-05-eterna-bordeaux.jpg" data-cap="Programme résidentiel Eterna — IDEAL · Bordeaux · Blender · Cycles">
+<div class="g-item rv" data-src="assets/images/interieurs/INT-05-eterna-bordeaux.jpg" data-id="eterna-salon" data-cap="Programme résidentiel Eterna · Salon · Groupe IDEAL · Bordeaux · Blender · Cycles · Photoshop">
   <img src="assets/images/interieurs/INT-05-eterna-bordeaux.jpg" alt="Eterna salon" loading="lazy" draggable="false">
   <div class="g-caption"><div class="g-cap-title">Programme résidentiel Eterna - Salon - Groupe IDEAL · Bordeaux</div><div class="g-cap-tools">blender · cycles · photoshop</div></div>
   <div class="g-expand">+</div>
 </div>
 
-<div class="g-item rv" data-src="assets/images/interieurs/INT-07-eterna-cuisine.jpg" data-cap="Programme résidentiel Eterna — cuisine · IDEAL · Bordeaux · Blender · Cycles">
+<div class="g-item rv" data-src="assets/images/interieurs/INT-07-eterna-cuisine.jpg" data-id="eterna-cuisine" data-cap="Programme résidentiel Eterna · Cuisine · Groupe IDEAL · Bordeaux · Blender · Cycles · Photoshop">
   <img src="assets/images/interieurs/INT-07-eterna-cuisine.jpg" alt="Eterna cuisine" loading="lazy" draggable="false">
   <div class="g-caption"><div class="g-cap-title">Programme résidentiel Eterna - Cuisine - Groupe IDEAL · Bordeaux</div><div class="g-cap-tools">blender · cycles · photoshop</div></div>
   <div class="g-expand">+</div>
 </div>
 
-<div class="g-item rv" data-src="assets/images/interieurs/INT-10-interieur-muuto.jpg" data-cap="Mobilier Muuto — étude produit · 3ds Max · V-Ray">
-  <img src="assets/images/interieurs/INT-10-interieur-muuto.jpg" alt="Mobilier Muuto" loading="lazy" draggable="false">
-  <div class="g-caption"><div class="g-cap-title">Mobilier Muuto - étude produit</div><div class="g-cap-tools">3ds max · v-ray · photoshop</div></div>
+<div class="g-item rv" data-id="sejour-nordique" data-images="assets/images/interieurs/INT-14-sejour-nordique-1.jpg|assets/images/interieurs/INT-14-sejour-nordique-2.jpg" data-cap="Séjour nordique · Étude d'ambiance · d'après une résidence privée, Stockholm · 3ds Max · Corona · Magnific AI · Photoshop">
+  <img src="assets/images/interieurs/INT-14-sejour-nordique-vignette.jpg" alt="Séjour nordique" loading="lazy" draggable="false">
+  <div class="g-caption"><div class="g-cap-title">Séjour nordique · d'après une résidence privée, Stockholm</div><div class="g-cap-tools">3ds max · corona · magnific ai · photoshop</div></div>
   <div class="g-expand">+</div>
 </div>
 
-<div class="g-item rv" data-src="assets/images/interieurs/INT-09-eria-cogedim.jpg" data-cap="Espace cafétaria — Tour ERIA · Cogedim · 3ds Max · V-Ray">
+<div class="g-item rv" data-src="assets/images/interieurs/INT-09-eria-cogedim.jpg" data-id="tour-eria" data-cap="Espace cafétéria · Tour ERIA · Cogedim · Paris La Défense · 3ds Max · V-Ray · Photoshop">
   <img src="assets/images/interieurs/INT-09-eria-cogedim.jpg" alt="Tour ERIA" loading="lazy" draggable="false">
-  <div class="g-caption"><div class="g-cap-title">Espace cafétaria - Tour ERIA - Cogedim · Paris La Défense</div><div class="g-cap-tools">3ds max · v-ray · photoshop</div></div>
+  <div class="g-caption"><div class="g-cap-title">Espace cafétéria - Tour ERIA - Cogedim · Paris La Défense</div><div class="g-cap-tools">3ds max · v-ray · photoshop</div></div>
   <div class="g-expand">+</div>
 </div>
 
-<div class="g-item rv" data-src="assets/images/interieurs/INT-11-bureau-global-agencement.jpg" data-cap="Aménagement de bureau — Global Agencement · 3ds Max · V-Ray">
+<div class="g-item rv" data-src="assets/images/interieurs/INT-11-bureau-global-agencement.jpg" data-id="global-agencement" data-cap="Aménagement de bureau · Global Agencement · 3ds Max · V-Ray · Photoshop">
   <img src="assets/images/interieurs/INT-11-bureau-global-agencement.jpg" alt="Global Agencement" loading="lazy" draggable="false">
   <div class="g-caption"><div class="g-cap-title">Aménagement de bureau - Global Agencement</div><div class="g-cap-tools">3ds max · v-ray · photoshop</div></div>
   <div class="g-expand">+</div>
 </div>
+
 
     </div>
   </div>
@@ -390,7 +429,7 @@ img{-webkit-user-drag:none;user-select:none}
     <div class="media-block-item">
       <div class="media-block-title">
         <h2 class="media-title">visite virtuelle 360°</h2>
-        <p class="media-subtitle">Programme résidentiel Eterna · Goupe IDEAL · Bordeaux<br>Cliquez et faites glisser pour explorer l'espace</p>
+        <p class="media-subtitle">Programme résidentiel Eterna · Groupe IDEAL · Bordeaux<br>Cliquez et faites glisser pour explorer l'espace</p>
       </div>
       <div id="panorama"></div>
       <p class="media-lbl">3ds max · corona · photoshop</p>
@@ -429,35 +468,43 @@ img{-webkit-user-drag:none;user-select:none}
     <!-- 4 images en 2 colonnes = parfaitement équilibré : 2+2 -->
     <div class="gallery-grid-4" id="gExt">
 
-      <div class="g-item rv" data-src="assets/images/exterieurs/EXT-01-barcelona-house.jpg" data-cap=" Barcelona House — Ström Architects · 3ds Max · corona">
-        <img src="assets/images/exterieurs/EXT-01-barcelona-house.jpg" alt="Giboire" loading="lazy" draggable="false">
+      <div class="g-item rv" data-src="assets/images/exterieurs/EXT-01-barcelona-house.jpg" data-id="barcelona-house" data-cap="Étude architecturale · Barcelona House · d'après Ström Architects · 3ds Max · Corona · Photoshop">
+        <img src="assets/images/exterieurs/EXT-01-barcelona-house.jpg" alt="Barcelona House" loading="lazy" draggable="false">
         <div class="g-caption"><div class="g-cap-title">Barcelona House · d'après Ström Architects</div><div class="g-cap-tools">3ds max · corona · photoshop</div></div>
         <div class="g-expand">+</div>
       </div>
       
-      <div class="g-item rv" data-src="assets/images/exterieurs/EXT-02-i3f-arcueil.jpg" data-cap="Logement collectif — I3F · Arcueil · 3ds Max · Corona">
+      <div class="g-item rv" data-src="assets/images/exterieurs/EXT-02-i3f-arcueil.jpg" data-id="i3f-arcueil" data-cap="Logement collectif · I3F · Arcueil · 3ds Max · Corona · Photoshop">
         <img src="assets/images/exterieurs/EXT-02-i3f-arcueil.jpg" alt="I3F Arcueil" loading="lazy" draggable="false">
         <div class="g-caption"><div class="g-cap-title">Logement collectif - i3f · Arcueil</div><div class="g-cap-tools">3ds max · corona · photoshop</div></div>
         <div class="g-expand">+</div>
       </div>
       
-      <div class="g-item rv" data-src="assets/images/exterieurs/EXT-03-giboire.jpg" data-cap="Programme résidentiel — Giboire · Paris Venelles · 3ds Max · V-Ray">
+      <div class="g-item rv" data-src="assets/images/exterieurs/EXT-03-giboire.jpg" data-id="giboire" data-cap="Programme résidentiel · Giboire · Paris Venelles · 3ds Max · V-Ray · Photoshop">
         <img src="assets/images/exterieurs/EXT-03-giboire.jpg" alt="Giboire" loading="lazy" draggable="false">
         <div class="g-caption"><div class="g-cap-title">Programme résidentiel - Giboire · Paris Venelles</div><div class="g-cap-tools">3ds max · v-ray · photoshop</div></div>
         <div class="g-expand">+</div>
       </div>
 
-      <div class="g-item rv" data-src="assets/images/exterieurs/EXT-06-cas-architect.jpg" data-cap="Résidence WULF — CAS Architecten · 3ds Max · V-Ray">
+      <div class="g-item rv" data-src="assets/images/exterieurs/EXT-06-cas-architect.jpg" data-id="residence-wulf" data-cap="Étude architecturale · Résidence WULF · d'après CAS Architecten · 3ds Max · V-Ray · Photoshop">
         <img src="assets/images/exterieurs/EXT-06-cas-architect.jpg" alt="Résidence WULF" loading="lazy" draggable="false">
         <div class="g-caption"><div class="g-cap-title">Résidence WULF · d'après CAS Architecten</div><div class="g-cap-tools">3ds max · v-ray · photoshop</div></div>
         <div class="g-expand">+</div>
       </div>
 
-      <div class="g-item rv" data-src="assets/images/exterieurs/EXT-04-hidden-villa.jpg" data-cap="Hidden Villa — i29 Architects · Twinmotion">
+      <div class="g-item rv" data-src="assets/images/exterieurs/EXT-04-hidden-villa.jpg" data-id="hidden-villa" data-cap="Étude architecturale · Hidden Villa · d'après i29 Architects · 3ds Max · Twinmotion · Photoshop">
         <img src="assets/images/exterieurs/EXT-04-hidden-villa.jpg" alt="Hidden Villa" loading="lazy" draggable="false">
         <div class="g-caption"><div class="g-cap-title">Hidden Villa · d'après i29 Architects</div><div class="g-cap-tools">3ds max · twinmotion · photoshop</div></div>
         <div class="g-expand">+</div>
       </div>
+
+<div class="g-item rv" data-id="london-facade"
+     data-images="assets/images/exterieurs/EXT-07-london-facade-2.jpg|assets/images/exterieurs/EXT-07-london-facade-3.jpg"
+     data-cap="Étude architecturale · Façade londonienne · d'après référence photographique · 3ds Max · Corona · Magnific AI · Photoshop">
+  <img src="assets/images/exterieurs/EXT-07-london-facade-vignette.jpg" alt="Façade londonienne" loading="lazy" draggable="false">
+  <div class="g-caption"><div class="g-cap-title">Façade londonienne · d'après référence photographique</div><div class="g-cap-tools">3ds max · corona · magnific ai · photoshop</div></div>
+  <div class="g-expand">+</div>
+</div>
 
     </div>
   </div>
@@ -524,7 +571,7 @@ document.querySelectorAll('.rv').forEach(el=>rvObs.observe(el));
    → Ajustez yaw pour choisir l'angle de départ (0-360)
    → autoRotate: vitesse de rotation (-2 = douce)
 */
-pannellum.viewer('panorama',{
+if(window.pannellum)pannellum.viewer('panorama',{
   type:'equirectangular',
   panorama:'assets/images/360/panorama-salon.jpg',
   autoLoad:true,
@@ -537,31 +584,51 @@ pannellum.viewer('panorama',{
   backgroundColor:[245,242,238]
 });
 
-/* LIGHTBOX */
-const lb=document.getElementById('lb'),lbImg=document.getElementById('lb-img'),lbCap=document.getElementById('lb-cap'),lbN=document.getElementById('lb-n');
-let items=[],idx=0;
-function openLb(list,i){items=list;idx=i;render();lb.classList.add('open');document.body.classList.add('lb-open')}
-function render(){lbImg.src=items[idx].src;lbCap.textContent=items[idx].cap;lbN.textContent=(idx+1)+' / '+items.length}
-function closeLb(){lb.classList.remove('open');document.body.classList.remove('lb-open');setTimeout(()=>lbImg.src='',320)}
+/* LIGHTBOX — séries + liens directs
+   Chaque vignette a un data-id. Une série a en plus data-images (rendus séparés par |).
+   Lien direct : #id (1er rendu) ou #id-2, #id-3… (rendu précis).
+   Les flèches restent dans la série ; une image seule n'a pas de flèches. */
+const lb=document.getElementById('lb'),lbImg=document.getElementById('lb-img'),lbCap=document.getElementById('lb-cap'),lbN=document.getElementById('lb-n'),lbLink=document.getElementById('lb-link');
+const projects={};
+document.querySelectorAll('.g-item[data-id]').forEach(el=>{
+  const imgs=el.dataset.images?el.dataset.images.split('|').map(x=>x.trim()).filter(Boolean):[el.dataset.src||el.querySelector('img').getAttribute('src')];
+  const p={id:el.dataset.id,imgs:imgs,cap:el.dataset.cap||''};
+  projects[p.id]=p;
+  el.addEventListener('click',()=>openLb(p,0));
+});
+let cur=null,idx=0;
+function hashFor(){return cur.imgs.length>1?cur.id+'-'+(idx+1):cur.id}
+function render(){
+  lbImg.src=cur.imgs[idx];lbCap.textContent=cur.cap;lbN.textContent=(idx+1)+' / '+cur.imgs.length;
+  lbLink.textContent='copier le lien';
+  history.replaceState(null,'','#'+hashFor());
+  if(cur.imgs.length>1){new Image().src=cur.imgs[(idx+1)%cur.imgs.length]}
+}
+function openLb(p,i){cur=p;idx=i;lb.classList.toggle('single',p.imgs.length<2);render();lb.classList.add('open');document.body.classList.add('lb-open')}
+function closeLb(){lb.classList.remove('open');document.body.classList.remove('lb-open');history.replaceState(null,'',location.pathname+location.search);setTimeout(()=>lbImg.src='',320)}
+function step(d){if(!cur||cur.imgs.length<2)return;idx=(idx+d+cur.imgs.length)%cur.imgs.length;render()}
 document.getElementById('lb-close').onclick=closeLb;
-document.getElementById('lb-prev').onclick=()=>{idx=(idx-1+items.length)%items.length;render()};
-document.getElementById('lb-next').onclick=()=>{idx=(idx+1)%items.length;render()};
+document.getElementById('lb-prev').onclick=()=>step(-1);
+document.getElementById('lb-next').onclick=()=>step(1);
+lbLink.onclick=()=>{navigator.clipboard.writeText(location.origin+location.pathname+'#'+hashFor()).then(()=>{lbLink.textContent='lien copié ✓'})};
 lb.addEventListener('click',e=>{if(e.target===lb)closeLb()});
 document.addEventListener('keydown',e=>{
   if(!lb.classList.contains('open'))return;
   if(e.key==='Escape')closeLb();
-  if(e.key==='ArrowLeft'){idx=(idx-1+items.length)%items.length;render()}
-  if(e.key==='ArrowRight'){idx=(idx+1)%items.length;render()}
+  if(e.key==='ArrowLeft')step(-1);
+  if(e.key==='ArrowRight')step(1);
 });
-function bindGallery(id){
-  const els=[...document.querySelectorAll(`#${id} .g-item`)];
-  const data=els.map(el=>({src:el.dataset.src||el.querySelector('img').src,cap:el.dataset.cap||''}));
-  els.forEach((el,i)=>el.addEventListener('click',()=>openLb(data,i)));
+/* Ouverture directe depuis un lien (#salle-reunion, #salle-reunion-2…) */
+function openFromHash(){
+  const h=decodeURIComponent(location.hash.slice(1));
+  if(!h)return;
+  if(projects[h]){openLb(projects[h],0);return}
+  const m=h.match(/^(.+)-(\d+)$/);
+  if(m&&projects[m[1]]){const p=projects[m[1]],n=parseInt(m[2],10)-1;if(n>=0&&n<p.imgs.length)openLb(p,n)}
 }
-bindGallery('gInt');bindGallery('gExt');
-document.querySelectorAll('.g-featured').forEach(el=>{
-  el.addEventListener('click',()=>openLb([{src:el.dataset.src||el.querySelector('img').src,cap:el.dataset.cap||''}],0));
-});
+openFromHash();
+window.addEventListener('hashchange',openFromHash);
+
 /* FORMULAIRE — soumission AJAX sans quitter la page */
 const form = document.getElementById('contactForm');
 const fsub = form.querySelector('.fsub');
