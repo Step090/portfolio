@@ -248,6 +248,9 @@ footer{
 }
 
 img{-webkit-user-drag:none;user-select:none}
+.g-sub{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:34px 0 8px;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
+.g-sub::after{content:"";flex:1;height:1px;background:var(--linen)}
+@media(min-width:1025px){#gExt{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
@@ -388,6 +391,8 @@ img{-webkit-user-drag:none;user-select:none}
   <div class="g-caption"><div class="g-cap-title">Séjour nordique · d'après une résidence privée, Stockholm</div><div class="g-cap-tools">3ds max · corona · magnific ai · photoshop</div></div>
   <div class="g-expand">+</div>
 </div>
+
+<div class="g-sub">projets de promotion immobilière & tertiaire</div>
 
 <div class="g-item rv" data-src="assets/images/interieurs/INT-05-eterna-bordeaux.jpg" data-id="eterna-salon" data-cap="Programme résidentiel Eterna · Salon · Groupe IDEAL · Bordeaux · Blender · Cycles · Photoshop">
   <img src="assets/images/interieurs/INT-05-eterna-bordeaux.jpg" alt="Eterna salon" loading="lazy" draggable="false">
